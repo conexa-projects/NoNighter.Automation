@@ -55,8 +55,8 @@ else:
     timings.wait_until_passes(10, 0.5, lambda: input_field.is_enabled())
     input_field.set_focus()
     time.sleep(1)
-    input_field.type_keys("Automated Valuation", with_spaces=True)
-    print("Nombre del reporte ingresado correctamente'.")
+    input_field.type_keys("DDM Automated Valuation", with_spaces=True)
+    print("Nombre del reporte ingresado correctamente.")
 
     # Hacer click en el primer botón encontrado
     all_buttons = dlg.descendants(control_type="Button")
@@ -68,33 +68,34 @@ else:
 
     # Diccionario con inputs, valores y toggles para el Step 1
     step_1_data = {
-        "VD": ("input_text", "12312023"),
-        "FCFY": ("input_text", "2033"),
-        "MYC": ("input_text", "1"),
-        "WACC": ("input_text", "10.3"),
-        "PGR": ("input_text", "4"),
-        "TEM": ("input_text", "4"),
-        "CEDA": ("input_text", "1")
+        "checkbox-UDCF": ("checkbox", None),
+        "checkbox-DDM":  ("checkbox", None),
+        "VD": ("input_text", "12312025"),
+        "FCFY": ("input_text", "2031"),
+        "COE": ("input_text", "15.0"),
+        "checkbox-TEMC": ("checkbox", None),
+        "PGR": ("input_text", "2.5"),
+        "CEDA": ("input_text", "0"),
     }
 
     # Diccionario para el Step 2
     step_2_data = {
-        "YS": ("input_text", "2023"),
-        "EBI": ("input_text", "0.4"),
-        "D&A": ("input_text", "5.0"),
-        "CX": ("input_text", "-9.3"),
-        "CNWC": ("input_text", "4.0"),
-        "CCE": ("input_text", "5.0"),
-        "TD": ("input_text", "30.0"),
-        "MI": ("input_text", "2.0")
+        "YS": ("input_text", "2025;2026;2027;2028;2029;2030;2031"),
+        "EBI": ("input_text", "550.0;700.0;150.0;1,000.0;5.0;3,500.0;250.7"),
+        "DVDS": ("input_text", "385.0;490.0;0.0;700.0;3.5;2,450.0;175.5"),
+        "CCE": ("input_text", "250.0"),
+        "TD": ("input_text", "500.0"),
+        "MI": ("input_text", "50.9")
     }
 
-    # Diccionario para el step 3
+    # Diccionario para el Step 3
     step_3_data = {
-        "checkbox-PVTVC": ("checkbox", None),
-        "WACCS": ("input_text", "0.10"),
-        "PGRS": ("input_text", "0.70"),
-        "TEMS": ("input_text", "0.75"),
+        "checkbox-ITEMC": ("checkbox", None),
+        "checkbox-IPGRC": ("checkbox", None),
+        "checkbox-EVC": ("checkbox", None),
+        "WACCS": ("input_text", "0.25"),
+        "COES": ("input_text", "0.25"),
+        "PGRS": ("input_text", "0.25"),
     }
 
     # Llenar inputs del Step 1
@@ -104,10 +105,17 @@ else:
                 input_field = dlg.child_window(auto_id=auto_id, control_type="Edit")
                 timings.wait_until_passes(10, 0.5, lambda: input_field.is_enabled())
                 input_field.set_focus()
-                time.sleep(1)
+                time.sleep(2)
                 input_field.type_keys(value, with_spaces=True)
                 print(f"Texto '{value}' ingresado en el input con Automation ID '{auto_id}'.")
 
+            elif element_type == "checkbox":
+                checkbox = dlg.child_window(auto_id=auto_id, control_type="CheckBox")
+                timings.wait_until_passes(10, 0.5, lambda: checkbox.is_enabled())
+                if checkbox.get_toggle_state() == 1:  # Si está seleccionado
+                    checkbox.click_input()  # Desmarcar el checkbox
+                else:
+                    checkbox.click_input()
         except Exception as e:
             print(f"Error al interactuar con el elemento '{auto_id}': {str(e)}")
 
